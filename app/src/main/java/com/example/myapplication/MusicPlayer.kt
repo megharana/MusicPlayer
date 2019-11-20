@@ -21,7 +21,7 @@ import java.net.URL
 
 class MusicPlayer : AppCompatActivity() {
 
-//    val mediaPlayer = MediaPlayer()
+    private lateinit var mediaPlayer : MediaPlayer
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +68,7 @@ class MusicPlayer : AppCompatActivity() {
         val jsonObject = jsonArray.getJSONObject(songId)
         val urlCoverImage = jsonObject.getString("cover_image")
         val urlSong = jsonObject.getString("url")
-        val mediaPlayer = MediaPlayer.create(this, Uri.parse(urlSong))
+        mediaPlayer = MediaPlayer.create(this, Uri.parse(urlSong))
         val totalTime = mediaPlayer.duration
         mediaPlayer.start()
 
@@ -77,15 +77,15 @@ class MusicPlayer : AppCompatActivity() {
 
     }
     fun playBtnClick(v:View){
-//        val playBtn = findViewById<Button>(R.id.play_btn)
-//        if(mediaPlayer.isPlaying){
-//            mediaPlayer.pause()
-//            playBtn.setBackgroundResource(R.drawable.ic_launcher_foreground)
-//        }
-//        else{
-//            mediaPlayer.start()
-//            playBtn.setBackgroundResource(R.drawable.ic_launcher_background)
-//        }
+        val playBtn = findViewById<Button>(R.id.play_btn)
+        if(mediaPlayer.isPlaying){
+            mediaPlayer.pause()
+            playBtn.setBackgroundResource(R.drawable.ic_launcher_foreground)
+        }
+        else{
+            mediaPlayer.start()
+            playBtn.setBackgroundResource(R.drawable.ic_launcher_background)
+        }
     }
 
 }
