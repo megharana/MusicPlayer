@@ -3,13 +3,16 @@ package com.example.myapplication
 
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import com.squareup.picasso.Picasso
@@ -17,13 +20,16 @@ import org.json.JSONArray
 //import sun.jvm.hotspot.utilities.IntArray
 import java.net.HttpURLConnection
 import java.net.URL
+import android.widget.SeekBar
+import android.widget.TextView
 
 
 class MusicPlayer : AppCompatActivity() {
 
     private lateinit var mediaPlayer : MediaPlayer
-
-
+    private lateinit var seekProgress : SeekBar
+    private lateinit var runnable:Runnable
+    private var handler: Handler = Handler()
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
@@ -31,6 +37,12 @@ class MusicPlayer : AppCompatActivity() {
         setContentView(R.layout.music_player)
         val url_JSON = "http://starlord.hackerearth.com/studio"
         AsyncTaskHandleJson().execute(url_JSON)
+
+
+
+
+
+
 
 
     }
@@ -68,11 +80,30 @@ class MusicPlayer : AppCompatActivity() {
         val jsonObject = jsonArray.getJSONObject(songId)
         val urlCoverImage = jsonObject.getString("cover_image")
         val urlSong = jsonObject.getString("url")
+
         mediaPlayer = MediaPlayer.create(this, Uri.parse(urlSong))
         val totalTime = mediaPlayer.duration
-        mediaPlayer.start()
+        mediaPlayer.setOnPreparedListener(MediaPlayer.OnPreparedListener(){
+            
+        })
 
+        mediaPlayer.start()
+        initializeSeekBar()
         Picasso.get().load(urlCoverImage).into(songAlbum)
+        seekProgress.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
+                if (b) {
+                    mediaPlayer.seekTo(i)
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+            }
+        })
+
 
 
     }
@@ -80,13 +111,48 @@ class MusicPlayer : AppCompatActivity() {
         val playBtn = findViewById<Button>(R.id.play_btn)
         if(mediaPlayer.isPlaying){
             mediaPlayer.pause()
-            playBtn.setBackgroundResource(R.drawable.ic_launcher_foreground)
+
+            playBtn.setBackgroundResource(R.drawable.play_btn_image)
         }
         else{
             mediaPlayer.start()
-            playBtn.setBackgroundResource(R.drawable.ic_launcher_background)
+
+            playBtn.setBackgroundResource(R.drawable.pause_btn_image)
         }
     }
 
+    private fun initializeSeekBar() {
+        seekProgress = findViewById(R.id.song_progress)
+        seekProgress.max = mediaPlayer.duration
+        val startText = findViewById<TextView>(R.id.start)
+        val stopText = findViewById<TextView>(R.id.end)
+        runnable = Runnable {
+            seekProgress.progress = mediaPlayer.currentPosition
+
+            startText.text = "${mediaPlayer.currentSeconds/60}:${(mediaPlayer.currentSeconds)%60}"
+
+            stopText.text = "${mediaPlayer.seconds/60}:${(mediaPlayer.seconds)%60}"
+
+
+            handler.postDelayed(runnable, 1000)
+        }
+        handler.postDelayed(runnable, 1000)
+    }
 }
+
+
+
+
+// Extension property to get media player duration in seconds
+val MediaPlayer.seconds: Int
+    get() {
+        return (this.duration / 1000)
+    }
+
+
+// Extension property to get media player current position in seconds
+val MediaPlayer.currentSeconds: Int
+    get() {
+        return (this.currentPosition / 1000)
+    }
 

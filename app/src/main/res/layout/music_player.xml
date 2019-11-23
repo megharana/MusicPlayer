@@ -30,10 +30,10 @@
         android:layout_marginBottom="731dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.037"
+        app:layout_constraintVertical_bias="0.011"
 
-        tools:layout_editor_absoluteX="52dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="53dp" />
 
     <LinearLayout
         android:id="@+id/timer"
@@ -48,31 +48,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/song_album"
         app:layout_constraintVertical_bias="0.571">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-        <TextView
-            android:id="@+id/start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/startTime" />
+                android:text="@string/startTime" />
 
-        <TextView
-            android:id="@+id/end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/endTime" />
+            <TextView
+                android:id="@+id/end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="@string/endTime" />
+        </RelativeLayout>
+
+
 
     </LinearLayout>
 
     <Button
         android:id="@+id/play_btn"
-        android:onClick="playBtnClick"
-        android:layout_width="144dp"
-        android:layout_height="100dp"
+        android:layout_width="33dp"
+        android:layout_height="51dp"
         android:layout_marginStart="133dp"
         android:layout_marginTop="27dp"
         android:layout_marginEnd="134dp"
         android:layout_marginBottom="105dp"
-        android:background="@drawable/ic_launcher_foreground"
+        android:background="@drawable/pause_btn_image"
+        android:onClick="playBtnClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
