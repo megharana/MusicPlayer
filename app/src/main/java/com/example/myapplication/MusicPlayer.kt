@@ -2,9 +2,6 @@ package com.example.myapplication
 
 
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.AsyncTask
@@ -12,7 +9,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import com.squareup.picasso.Picasso
@@ -30,6 +26,9 @@ class MusicPlayer : AppCompatActivity() {
     private lateinit var seekProgress : SeekBar
     private lateinit var runnable:Runnable
     private var handler: Handler = Handler()
+    var songId:Int = 0
+    var resultString:String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
@@ -40,9 +39,11 @@ class MusicPlayer : AppCompatActivity() {
 
 
 
+    }
 
-
-
+    override fun onBackPressed() {
+        super.onBackPressed()
+//        mediaPlayer.stop()
 
 
     }
@@ -64,29 +65,26 @@ class MusicPlayer : AppCompatActivity() {
 
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
-            handleJson(result)
+            resultString = result
+            val intent = intent
+            songId = intent.getIntExtra("song_id1", 1)
+            handleJson(resultString,songId)
         }
 
 
 
     }
-    private fun handleJson(jsonString: String?) {
+    private fun handleJson(jsonString: String?, songId: Int) {
 
 
         val jsonArray = JSONArray(jsonString)
-        val intent = intent
-        val songId = intent.getIntExtra("song_id1", 1)
+
+
         val songAlbum = findViewById<AppCompatImageView>(R.id.song_album)
         val jsonObject = jsonArray.getJSONObject(songId)
         val urlCoverImage = jsonObject.getString("cover_image")
         val urlSong = jsonObject.getString("url")
-
         mediaPlayer = MediaPlayer.create(this, Uri.parse(urlSong))
-        val totalTime = mediaPlayer.duration
-        mediaPlayer.setOnPreparedListener(MediaPlayer.OnPreparedListener(){
-            
-        })
-
         mediaPlayer.start()
         initializeSeekBar()
         Picasso.get().load(urlCoverImage).into(songAlbum)
@@ -120,6 +118,16 @@ class MusicPlayer : AppCompatActivity() {
             playBtn.setBackgroundResource(R.drawable.pause_btn_image)
         }
     }
+    fun prevBtnClick(v:View){
+        mediaPlayer.reset()
+        handleJson(resultString, songId-1)
+    }
+    fun nextBtnClick(v:View){
+        mediaPlayer.reset()
+        handleJson(resultString, songId+1)
+    }
+
+
 
     private fun initializeSeekBar() {
         seekProgress = findViewById(R.id.song_progress)

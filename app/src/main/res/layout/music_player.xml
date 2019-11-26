@@ -10,8 +10,8 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/song_album"
-        android:layout_width="331dp"
-        android:layout_height="366dp"
+        android:layout_width="434dp"
+        android:layout_height="348dp"
         android:layout_marginTop="7dp"
         android:layout_marginBottom="42dp"
         android:contentDescription="@string/todo"
@@ -84,6 +84,40 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/song_progress" />
+
+    <Button
+        android:id="@+id/prev_btn"
+        android:layout_width="51dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="53dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="134dp"
+        android:layout_marginBottom="105dp"
+        android:background="@drawable/prev_btn"
+        android:onClick="prevBtnClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/song_progress"
+        app:layout_constraintVertical_bias="0.562" />
+
+    <Button
+        android:id="@+id/next_btn"
+        android:layout_width="51dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="303dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="134dp"
+        android:layout_marginBottom="105dp"
+        android:background="@drawable/next_btn"
+        android:onClick="nextBtnClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/song_progress"
+        app:layout_constraintVertical_bias="0.562" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

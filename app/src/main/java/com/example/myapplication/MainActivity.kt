@@ -2,6 +2,7 @@ package com.example.myapplication
 
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.AsyncTask
 import android.os.Bundle
 import android.widget.Toast
@@ -22,9 +23,13 @@ class MainActivity : AppCompatActivity() {
 
         songs_list.setOnItemClickListener { parent, view, position, id ->
             Toast.makeText(this,"Clicked Item : $position", Toast.LENGTH_SHORT).show()
+
+
             val intent = Intent(this, MusicPlayer::class.java)
             intent.putExtra("song_id1", position.toInt())
+
             startActivity(intent)
+
 
 
         }
