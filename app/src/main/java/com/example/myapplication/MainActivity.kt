@@ -2,7 +2,6 @@ package com.example.myapplication
 
 
 import android.content.Intent
-import android.media.MediaPlayer
 import android.os.AsyncTask
 import android.os.Bundle
 import android.widget.Toast
@@ -16,16 +15,16 @@ import java.net.URL
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        super.onCreate(savedInstanceState) // NEEDS-ATTENTION
+        setContentView(R.layout.activity_main) // set the layout as in activity_main.xml
         val url = "http://starlord.hackerearth.com/studio"
-        AsyncTaskHandleJson().execute(url)
+        AsyncTaskHandleJson().execute(url) // make a get request to the specified url
 
-        songs_list.setOnItemClickListener { parent, view, position, id ->
+        songs_list.setOnItemClickListener { _, _, position, _ ->
             Toast.makeText(this,"Clicked Item : $position", Toast.LENGTH_SHORT).show()
 
 
-            val intent = Intent(this, MusicPlayer::class.java)
+            val intent = Intent(this, MusicPlayer::class.java) // send info across pages
             intent.putExtra("song_id1", position.toInt())
 
             startActivity(intent)
@@ -52,35 +51,37 @@ class MainActivity : AppCompatActivity() {
 
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
-            handleJson(result)
+            onReceivingSongList(result)
         }
 
 
 
     }
-    private fun handleJson(jsonString: String?) {
-        val jsonArray = JSONArray(jsonString)
+    private fun onReceivingSongList(customSongsJSONList: String?) {
+        val customSongJSONArray = JSONArray(customSongsJSONList)
 
-        val list = ArrayList<Song>()
-        var x = 0
+        val customSongList = ArrayList<Song>()
+        var customSongListIterator = 0
 
-        while (x < jsonArray.length()) {
-            val jsonObject = jsonArray.getJSONObject(x)
+        while (customSongListIterator < customSongJSONArray.length()) {
+            val customSongJsonObject = customSongJSONArray.getJSONObject(customSongListIterator)
 
-            list.add(
+            customSongList.add(
                 Song(
-                    jsonObject.getString("song"),
-                    jsonObject.getString("artists")
+                        customSongJsonObject.getString("song"),
+                        customSongJsonObject.getString("artists"),
+                        customSongJsonObject.getString("cover_image")
+
 
                 )
             )
 
 
-            x++
+            customSongListIterator++
 
         }
 
-        val adapter = ListAdapter(this, list)
+        val adapter = ListAdapter(this, customSongList)
         songs_list.adapter = adapter
 
 
